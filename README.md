@@ -13,8 +13,7 @@ git clone https://github.com/will-smithgall/ppDisplay
 ```sh
 pip install -r requirements.txt
 ```
-3. Create a file called ```.env```. Inside this file, have two lines for your API client ID and Secret
-It should look this once complete
+3. Create a file called ```.env```. Inside this file, have two lines for your API client ID and clint secret. It should look this once complete
 ```sh
 CLIENT_ID=xxxxx
 CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
