@@ -1,5 +1,5 @@
-#pip install requests
 from re import sub
+import re
 import requests
 import json
 from dotenv import load_dotenv
@@ -43,6 +43,9 @@ def get_recent_score(id, token):
         scores_url, headers={"Authorization": f"Bearer {token['access_token']}"}
     )
 
+    if (len(response.json()) == 0):
+        print(f"Player ID {id} has not submitted a play in the last 24 hours!")
+
     return response.json()
 
 
@@ -57,7 +60,7 @@ def get_beatmap_id(txt):
     return beatmapset_ids
 
 
-def parse_attributes(txt):
+def get_play_info(txt):
     submitted_data = []
 
     for item in txt:
@@ -106,10 +109,10 @@ def parse_attributes(txt):
 
     return return_string
 
+
 token = get_token()
 print()
-most_recent = parse_attributes(get_recent_score(7429544, token))
-top_plays = parse_attributes(get_best_scores(7429544, token))
+most_recent = get_play_info(get_recent_score(7429544, token))
+top_plays = get_play_info(get_best_scores(7429544, token))
 
-print(top_plays)
-print(get_beatmap_id(get_best_scores(7429544, token)))
+print(get_beatmap_id(most_recent))
