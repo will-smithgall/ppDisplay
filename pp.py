@@ -1,9 +1,11 @@
-from re import sub
+from ensurepip import bootstrap
+from re import M, sub
 import re
 import requests
 import json
 from dotenv import load_dotenv
 import os
+from flask import Flask, render_template, Markup
 
 load_dotenv()
 
@@ -43,19 +45,23 @@ def get_recent_score(id, token):
         scores_url, headers={"Authorization": f"Bearer {token['access_token']}"}
     )
 
-    if (len(response.json()) == 0):
+    if len(response.json()) == 0:
         print(f"Player ID {id} has not submitted a play in the last 24 hours!")
 
     return response.json()
 
+def get_user_img(txt):
+    for play in txt:
+        user_img = play["user"]["avatar_url"]
+
+    return user_img
+
 
 # Passes in json formatted repsonse
 # returns id of beatmap
-def get_beatmap_id(txt):
-    beatmapset_ids = []
-
+def get_beatmap_img(txt):
     for play in txt:
-        beatmapset_ids.append(play["beatmap"]["beatmapset_id"])
+        beatmapset_ids = play["beatmapset"]["covers"]["card@2x"]
 
     return beatmapset_ids
 
@@ -101,18 +107,32 @@ def get_play_info(txt):
             mods = ", ".join(dataset[5])
 
         return_string += (
-            f"{dataset[0]} - {dataset[1]}\n"
-            f"{dataset[2]}, {(dataset[3]*100):.2f}%, {dataset[4]:.1f}pp, {dataset[8]}\n"
-            f"{mods}, {dataset[7]:,}x, Score: {dataset[6]:,}\n"
-            f"AR {dataset[9]}, {dataset[10]} bpm, {dataset[11]} Stars\n\n"
+            f"{dataset[0]} - {dataset[1]}<br>"
+            f"{dataset[2]}, {(dataset[3]*100):.2f}%, {dataset[4]:.1f}pp, {dataset[8]}<br>"
+            f"{mods}, {dataset[7]:,}x, Score: {dataset[6]:,}<br>"
+            f"AR {dataset[9]}, {dataset[10]} bpm, {dataset[11]} Stars<br>"
         )
 
     return return_string
 
-
+#Get info
 token = get_token()
-print()
-most_recent = get_play_info(get_recent_score(7429544, token))
-top_plays = get_play_info(get_best_scores(7429544, token))
+most_recent = get_recent_score(7429544, token)
+top_plays = get_best_scores(7429544, token)
 
-print(get_beatmap_id(most_recent))
+app = Flask(__name__)
+
+
+
+@app.route("/")
+def home():
+    formatted_recent = get_play_info(most_recent)
+    user_img = get_user_img(most_recent)
+    beatmap_card = get_beatmap_img(most_recent)
+    return render_template("index.html", formatted_recent = Markup(formatted_recent), user_img = user_img, beatmap_card = beatmap_card)
+
+
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()   

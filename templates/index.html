@@ -1,0 +1,43 @@
+{% block title %}{% endblock %}   
+
+{% block content%}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>pp Display</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+        body {
+            background-color: #ffffff;
+            line-height: 30px;
+            font-weight: 300;
+            font-family: 'Cormorant', serif;
+            color: black;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 54px;
+        }
+
+        a {
+            font-size: 25px;
+            text-decoration: none;
+            color: black;
+        }
+
+        /* a:hover {
+            text-decoration: underline;
+        } */
+    </style>
+  </head>
+  <body>
+    <a>{{ formatted_recent }}</a>
+    <img src="{{ url_for('static', filename=beatmap_card) }}" alt="no picture">
+
+  </body>
+</html>
+{% endblock%}
