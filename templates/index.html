@@ -21,8 +21,6 @@
         </header>
 
         <main class="px-3">
-            <img src="{{ play.beatmapset.covers['card@2x'] }}" class="card-img-top" alt="Cover">
-
             {% if play.pp is none %}
                 {% set pp = 0 %}
             {% else %}
@@ -35,10 +33,14 @@
                 {% set mods = "".join(play.mods) %}
             {% endif %}
 
-            <li class="list-group-item">{{ play.rank }}, {{ (play.accuracy*100)|round(2, 'floor') }}% Accuracy</li>
-            <li class="list-group-item">{{ mods }}, {{ play.statistics.count_300 + play.statistics.count_geki }}/{{ play.statistics.count_100 + play.statistics.count_katu }}/{{ play.statistics.count_50 }}/{{ play.statistics.count_miss }}</li>
-            <li class="list-group-item">{{ "{:.1f}".format(pp) }} pp, {{ play.max_combo }}x, {{ "{:,}".format(play.score) }}</li>
-            <li class="list-group-item">{{ play.beatmap.ar }} AR, {{ play.beatmap.bpm }} bpm, {{ play.beatmap.difficulty_rating }} stars</li>
+            <ul>
+              <li class="list-group-item">{{ play.rank }}, {{ (play.accuracy*100)|round(2, 'floor') }}% Accuracy</li>
+              <li class="list-group-item">{{ mods }}, {{ play.statistics.count_300 + play.statistics.count_geki }}/{{ play.statistics.count_100 + play.statistics.count_katu }}/{{ play.statistics.count_50 }}/{{ play.statistics.count_miss }}</li>
+              <li class="list-group-item">{{ "{:.1f}".format(pp) }} pp, {{ play.max_combo }}x, {{ "{:,}".format(play.score) }}</li>
+              <li class="list-group-item">{{ play.beatmap.ar }} AR, {{ play.beatmap.bpm }} bpm, {{ play.beatmap.difficulty_rating }} stars</li>
+            </ul>
+
+            <img src="{{ play.beatmapset.covers['card@2x'] }}" class="rounded" alt="Cover">
         </main>
 
         <footer class="mt-auto text-white-50">
